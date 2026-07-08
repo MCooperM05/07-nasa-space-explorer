@@ -31,19 +31,34 @@ function openModal(item) {
   if (item.media_type === 'video') {
     modalImg.classList.add('hidden');
 
-    // Only YouTube and Vimeo reliably allow iframe embedding.
-    // Other hosts (including apod.nasa.gov itself) block it via
-    // the X-Frame-Options header, which causes a "refused to connect" error.
-    const isEmbeddable = /youtube\.com|youtu\.be|player\.vimeo\.com/.test(item.url);
+    const isYouTubeOrVimeo = /youtube\.com|youtu\.be|player\.vimeo\.com/.test(item.url);
+    const isDirectVideoFile = /\.(mp4|webm|ogg)$/i.test(item.url);
 
-    if (isEmbeddable) {
+    if (isYouTubeOrVimeo) {
+      // Hosted platforms that explicitly support iframe embedding
       const videoWrapper = document.createElement('div');
       videoWrapper.id = 'modalVideoWrapper';
       videoWrapper.classList.add('modal-video-wrapper');
       videoWrapper.innerHTML = `<iframe src="${item.url}" allowfullscreen></iframe>`;
       modalImg.insertAdjacentElement('afterend', videoWrapper);
+
+    } else if (isDirectVideoFile) {
+      // A raw video file (like NASA's own .mp4s) — use a native <video>
+      // tag instead of an iframe. This isn't blocked by X-Frame-Options
+      // since we're loading media directly, not embedding a webpage.
+      const videoWrapper = document.createElement('div');
+      videoWrapper.id = 'modalVideoWrapper';
+      videoWrapper.classList.add('modal-video-wrapper');
+      videoWrapper.innerHTML = `
+        <video controls autoplay style="width:100%; height:100%; position:absolute; top:0; left:0; border-radius:4px;">
+          <source src="${item.url}" type="video/mp4">
+          Your browser doesn't support embedded video.
+        </video>
+      `;
+      modalImg.insertAdjacentElement('afterend', videoWrapper);
+
     } else {
-      // Fallback: a plain link that opens the video in a new tab
+      // Anything else (e.g. a blocked apod.nasa.gov page) — fall back to a link
       const link = document.createElement('a');
       link.id = 'modalVideoLink';
       link.href = item.url;
@@ -111,14 +126,16 @@ async function fetchImages(){
       card.dataset.index = index;
 
       if (item.media_type === 'video') {
+        console.log('Full video item:', item);
         // Use the video's thumbnail if NASA provided one; otherwise fall back
         // to a plain placeholder box so the layout doesn't break
-        const thumb = item.thumbnail_url
-          ? `<img src="${item.thumbnail_url}" alt="${item.title}">`
-          : `<div class="placeholder-icon" style="padding:60px 0;">🎬</div>`;
+      const thumb = item.thumbnail_url
+        ? `<img src="${item.thumbnail_url}" alt="${item.title}">`
+        : /\.(mp4|webm|ogg)$/i.test(item.url)
+          ? `<video class="card-video-thumb" src="${item.url}#t=0.5" muted preload="metadata"></video>`
+          : `<div class="video-placeholder">🎬</div>`;
 
         card.innerHTML = `
-          <span class="media-badge">▶ VIDEO</span>
           ${thumb}
           <p><strong>${item.title}</strong></p>
           <p>${item.date}</p>
