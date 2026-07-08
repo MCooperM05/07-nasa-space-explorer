@@ -96,12 +96,13 @@ button {
 
 /* Button specific */
 button {
-  background-color: #d3d3d3;
-  color: black;
+  font-weight: bold;
+  background-color: #0032A0;
+  color: white;
   cursor: pointer;
 }
 button:hover {
-  background-color: #bfbfbf;
+  background-color: #00226b;
 }
 
 /* Stack horizontally on wider screens */
