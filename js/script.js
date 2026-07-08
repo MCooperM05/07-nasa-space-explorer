@@ -13,5 +13,5 @@ const spaceImagesBtn = document.getElementById("spaceImagesBtn");
 spaceImagesBtn.addEventListener('click', fetchImages);
 
 async function fetchImages(){
-
+  const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=${startInput}&end_date=${endInput}`;
 }
