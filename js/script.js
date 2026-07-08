@@ -15,6 +15,16 @@ spaceImagesBtn.addEventListener('click', fetchImages);
 async function fetchImages(){
   const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=${startInput.value}&end_date=${endInput.value}`;
 
+  const gallery = document.querySelector('.gallery');
+
+  // Show a loading message immediately, using your existing placeholder styles
+  gallery.innerHTML = `
+    <div class="placeholder">
+      <div class="placeholder-icon">🔄</div>
+      <p>Loading space photos…</p>
+    </div>
+  `;
+
   try {
     const response = await fetch(url);
 
@@ -24,16 +34,14 @@ async function fetchImages(){
 
     const images = await response.json();
 
-    // Match your CSS: .gallery is a class, not an id
-    const gallery = document.querySelector('.gallery');
-    gallery.innerHTML = ''; // Clear previous results (also removes any placeholder)
+    // Clear the loading message before adding real results
+    gallery.innerHTML = '';
 
     images.forEach(item => {
-      // Skip videos since <img> can't render them
       if (item.media_type !== 'image') return;
 
       const card = document.createElement('div');
-      card.classList.add('gallery-item'); // matches your .gallery-item CSS
+      card.classList.add('gallery-item');
 
       card.innerHTML = `
         <img src="${item.url}" alt="${item.title}">
@@ -44,8 +52,25 @@ async function fetchImages(){
       gallery.appendChild(card);
     });
 
+    // Handle the case where the date range returned zero images
+    if (gallery.children.length === 0) {
+      gallery.innerHTML = `
+        <div class="placeholder">
+          <div class="placeholder-icon">🪐</div>
+          <p>No images found for that date range.</p>
+        </div>
+      `;
+    }
+
   } catch (error) {
     console.error('Failed to fetch space images:', error);
-    alert('Something went wrong fetching images. Check the console for details.');
+
+    // Show an error message in the gallery itself, not just an alert
+    gallery.innerHTML = `
+      <div class="placeholder">
+        <div class="placeholder-icon">⚠️</div>
+        <p>Something went wrong fetching images. Please try again.</p>
+      </div>
+    `;
   }
 }

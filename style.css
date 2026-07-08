@@ -147,9 +147,3 @@ button:hover {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
 }
-
-.gallery-item.loading {
-  animation: pulse 1.5s infinite;
-  background: #222;
-  height: 260px;
-}
