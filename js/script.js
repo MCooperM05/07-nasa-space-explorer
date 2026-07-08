@@ -1,3 +1,26 @@
+// Array of fun space facts — add/remove as many as you like
+const spaceFacts = [
+  "A day on Venus is longer than a year on Venus — it takes 243 Earth days to rotate once, but only 225 to orbit the Sun.",
+  "Neutron stars are so dense that a teaspoon of their material would weigh about a billion tons.",
+  "There are more stars in the universe than grains of sand on every beach on Earth.",
+  "The footprints left by Apollo astronauts on the Moon will likely stay there for millions of years, since there's no wind or water to erode them.",
+  "Saturn could float in water because it's mostly made of gas and is less dense than water.",
+  "One million Earths could fit inside the Sun.",
+  "Space is completely silent — sound waves can't travel because there's no air (or any medium) for them to move through.",
+  "The largest known star, UY Scuti, is so big that it would take a jet flying at 900 km/h about 1,100 years to circle it once.",
+  "Jupiter's Great Red Spot is a storm larger than Earth that has been raging for at least 350 years.",
+  "Astronauts can grow up to 5 cm taller in space because there's no gravity compressing their spine."
+];
+
+// Pick one fact at random and display it
+function showRandomFact() {
+  const randomIndex = Math.floor(Math.random() * spaceFacts.length);
+  document.getElementById('funFactText').textContent = spaceFacts[randomIndex];
+}
+
+// Run once when the page loads
+showRandomFact();
+
 // Find our date picker inputs on the page
 const startInput = document.getElementById('startDate');
 const endInput = document.getElementById('endDate');

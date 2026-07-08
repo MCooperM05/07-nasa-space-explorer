@@ -40,6 +40,36 @@ h1 {
   margin-right: 15px;
 }
 
+/* Fun fact banner */
+.fun-fact {
+  font-family: "Inter", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0032A0;
+  border: 2px solid #E4002B;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  justify-content: center;
+}
+
+.fun-fact-icon {
+  font-size: 24px;
+  flex-shrink: 0; /* keeps the icon from shrinking if text wraps */
+}
+
+.fun-fact p {
+  font-size: 14px;
+  color: white;
+  line-height: 1.5;
+}
+
+.fun-fact strong {
+  color: white;
+}
+
 /* Date‐picker & button row */
 .filters {
   display: flex;
@@ -273,4 +303,20 @@ button:hover {
   object-fit: cover;
   border-radius: 4px;
   pointer-events: none; /* card click still opens the modal, not video controls */
+}
+
+/* Contain the zoom effect within the card's rounded corners */
+.gallery-item {
+  overflow: hidden;
+}
+
+/* Smoothly scale images on hover */
+.gallery-item img,
+.gallery-item video.card-video-thumb {
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img,
+.gallery-item:hover video.card-video-thumb {
+  transform: scale(1.08);
 }
