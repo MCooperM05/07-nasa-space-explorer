@@ -18,7 +18,7 @@ function showRandomFact() {
   document.getElementById('funFactText').textContent = spaceFacts[randomIndex];
 }
 
-// Run once when the page loads
+// Run once when the page loads to display random fact
 showRandomFact();
 
 // Find our date picker inputs on the page
